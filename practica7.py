@@ -25,9 +25,8 @@ if (not os.path.isdir("cdps")):
 	os.system("wget http://idefix.dit.upm.es/download/cdps/p7/p7.tgz")
 	os.system("tar xfvz p7.tgz")
 	os.system("cd p7")
-
-
-		
+	os.system("rm -rf p7.xml")
+	os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/p7.xml")
 
 
 print("-----------------------------------------------------------------------")
@@ -39,6 +38,7 @@ os.system("./bin/prepare-p7-vm")
 # Destruimos el escenario anterior si lo hubiese y creamos el nuevo
 os.system("vnx -f p7.xml -v --destroy")
 os.system("vnx -f p7.xml -v --create")
+
 
 print("-----------------------------------------------------------------------")
 print("------------------------- Configurando NAS ----------------------------")
@@ -78,7 +78,7 @@ os.system("lxc-attach -n nagios -- apt-get install nano")
 os.system("lxc-attach -n nagios -- apt-get install apache2 -y")
 
 
-
+# Por si necesitamos conectarnos de forma directa a otra terminal.
 # os.system("sshpass -p 'xxxx' ssh -o StrictHostKeyChecking=no root@nagios")
 
 
