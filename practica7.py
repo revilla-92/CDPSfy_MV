@@ -16,17 +16,19 @@ import os
 print("-----------------------------------------------------------------------")
 print("------------------------- Empieza el script ---------------------------")
 
-# Comprobamos si esta creado el directorio de trabajo "p3" y sino lo creamos.
+# Eliminamos si existe el directorio de trabajo para volver a importar los ficheros.
 if (not os.path.isdir("cdps")):
+	os.system("rm -rf cdps")
 
-	# Creamos el directorio de trabajo.
-	os.system("mkdir cdps")
-	os.chdir("cdps")
-	os.system("wget http://idefix.dit.upm.es/download/cdps/p7/p7.tgz")
-	os.system("tar xfvz p7.tgz")
-	os.chdir("p7")
-	os.system("rm -rf p7.xml")
-	os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/p7.xml")
+
+# Creamos el directorio de trabajo.
+os.system("mkdir cdps")
+os.chdir("cdps")
+os.system("wget http://idefix.dit.upm.es/download/cdps/p7/p7.tgz")
+os.system("tar xfvz p7.tgz")
+os.chdir("p7")
+os.system("rm -rf p7.xml")
+os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/p7.xml")
 
 
 print("-----------------------------------------------------------------------")
