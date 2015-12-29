@@ -21,10 +21,10 @@ if (not os.path.isdir("cdps")):
 
 	# Creamos el directorio de trabajo.
 	os.system("mkdir cdps")
-	os.system("cd cdps")
+	os.chdir("cdps")
 	os.system("wget http://idefix.dit.upm.es/download/cdps/p7/p7.tgz")
 	os.system("tar xfvz p7.tgz")
-	os.system("cd p7")
+	os.chdir("p7")
 	os.system("rm -rf p7.xml")
 	os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/p7.xml")
 
