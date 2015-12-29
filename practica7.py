@@ -29,6 +29,7 @@ os.system("tar xfvz p7.tgz")
 os.chdir("p7")
 os.system("rm -rf p7.xml")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/p7.xml")
+os.system("cd cdps/p7")
 
 
 print("-----------------------------------------------------------------------")
