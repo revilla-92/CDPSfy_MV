@@ -78,6 +78,8 @@ os.system("apt-get install nano")
 os.system("lxc-attach -n nagios -- apt-get update")
 os.system("lxc-attach -n nagios -- apt-get install nano")
 os.system("lxc-attach -n nagios -- apt-get install apache2 -y")
+os.system("lxc-attach -n nagios -- apt-get install nagios3 -y")
+os.system("lxc-attach -n nagios -- service apache2 restart")
 
 
 # Por si necesitamos conectarnos de forma directa a otra terminal.
