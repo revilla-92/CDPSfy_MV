@@ -84,8 +84,8 @@ os.system("lxc-attach -n nagios -- service apache2 restart")
 
 # Ahora cargamos los ficheros de configuracion para los servidores.
 for n in range (1, 5):
-	os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/s"+n+"_nagios2.cfg")
-	os.system("lxc-attach -n nagios -- mv s"+n+"_nagios2.cfg /etc/nagios3/conf.d/s"+n+"_nagios2.conf")
+	os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/s"+str(n)+"_nagios2.cfg")
+	os.system("lxc-attach -n nagios -- mv s"+str(n)+"_nagios2.cfg /etc/nagios3/conf.d/s"+str(n)+"_nagios2.conf")
 
 # Remplazamos el fichero de hostgroups
 os.system("lxc-attach -n nagios -- rm -rf /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
