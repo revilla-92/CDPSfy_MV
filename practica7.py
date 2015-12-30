@@ -82,6 +82,15 @@ os.system("lxc-attach -n nagios -- apt-get install apache2 -y")
 os.system("lxc-attach -n nagios -- apt-get install nagios3 -y")
 os.system("lxc-attach -n nagios -- service apache2 restart")
 
+# Ahora configuramos los ficheros de configuracion para los logs.
+
+for n in range (1, 5):
+	os.system("lxc-attach -n nagios -- cp /etc/nagios3/conf.d/localhost_nagios2.cfg /etc/nagios3/conf.d/s1_nagios2.cfg")
+
+
+
+
+
 
 # Por si necesitamos conectarnos de forma directa a otra terminal.
 # os.system("sshpass -p 'xxxx' ssh -o StrictHostKeyChecking=no root@nagios")
