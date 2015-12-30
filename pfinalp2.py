@@ -83,7 +83,8 @@ for n in range (1, 5):
 	os.system("sudo su -c 'lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/s"+str(n)+"_nagios2.cfg -P /etc/nagios3/conf.d'")
 
 # Remplazamos el fichero de hostgroups
-os.system("sudo su -c 'lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hostgroups_nagios2.cfg -P /etc/nagios3/conf.d'")
+# os.system("sudo su -c 'lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hostgroups_nagios2.cfg -P /etc/nagios3/conf.d'")
+# Si hacemos manualmente cambiando el fichero hostgroups y luego reiniciando nagios (service nagsios3 restart) funciona...
 
 # Reiniciamos nagios3 y apache2
 os.system("sudo su -c 'lxc-attach -n nagios -- service nagios3 restart'")
