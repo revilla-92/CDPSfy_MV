@@ -79,7 +79,7 @@ os.system("apt-get install nano")
 os.system("lxc-attach -n nagios -- apt-get update")
 os.system("lxc-attach -n nagios -- apt-get install nano")
 os.system("lxc-attach -n nagios -- apt-get install apache2 -y")
-os.system("lxc-attach -n nagios -- apt-get install nagios3 -y")
+os.system("lxc-attach -n nagios -- apt-get install nagios3")
 os.system("lxc-attach -n nagios -- service apache2 restart")
 
 # Ahora cargamos los ficheros de configuracion para los servidores.
@@ -88,11 +88,12 @@ for n in range (1, 5):
 	os.system("lxc-attach -n nagios -- mv s"+str(n)+"_nagios2.cfg /etc/nagios3/conf.d/s"+str(n)+"_nagios2.conf")
 
 # Remplazamos el fichero de hostgroups
-os.system("lxc-attach -n nagios -- rm -rf /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
-os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hostgroups_nagios2.cfg")
-os.system("lxc-attach -n nagios -- mv hostgroups_nagios2.cfg /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
+# os.system("lxc-attach -n nagios -- rm -rf /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
+# os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hostgroups_nagios2.cfg")
+# os.system("lxc-attach -n nagios -- mv hostgroups_nagios2.cfg /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
 
-# Reiniciamos nagios3
+# Reiniciamos nagios3 y apache2
+os.system("lxc-attach -n nagios -- service apache2 restart")
 os.system("lxc-attach -n nagios -- service nagios3 restart")
 
 
