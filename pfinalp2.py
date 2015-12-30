@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: latin-1 -*-
- 
+
 #################################### PRACTICA 7 ######################################
 ######################### Autores: Raquel Noblejas Sampedro  #########################
 #########################          Daniel Revilla Twose      #########################
@@ -15,7 +15,7 @@ print("------------------------- Empieza el script ---------------------------")
 
 # Eliminamos si existe el directorio de trabajo para volver a importar los ficheros.
 if (os.path.isdir("cdps")):
-	os.system("rm -rf cdps")
+        os.system("rm -rf cdps")
 
 
 # Creamos el directorio de trabajo.
@@ -52,27 +52,24 @@ print("-----------------------------------------------------------------------")
 print("---------------------- Configurando Servidores ------------------------")
 
 for n in range(1, 5):
-	comando = "sudo su -c 'lxc-attach -n s"+str(n)+" -- mkdir /mnt/nas'"
-	os.system(comando)
+        comando = "sudo su -c 'lxc-attach -n s"+str(n)+" -- mkdir /mnt/nas'"
+        os.system(comando)
 
-	if(n == 4):
-		comando1 = "sudo su -c 'lxc-attach -n s"+str(n)+" -- mount -t glusterfs 10.1.3."+str(n+19)+":/nas /mnt/nas'"
-		os.system(comando)
-	else:
-		comando1 = "sudo su -c 'lxc-attach -n s"+str(n)+" -- mount -t glusterfs 10.1.3."+str(n+20)+":/nas /mnt/nas'"
-		os.system(comando)
+        if(n == 4):
+                comando1 = "sudo su -c 'lxc-attach -n s"+str(n)+" -- mount -t glusterfs 10.1.3."+str(n+19)+":/nas /mnt/nas'"
+                os.system(comando)
+        else:
+                comando1 = "sudo su -c 'lxc-attach -n s"+str(n)+" -- mount -t glusterfs 10.1.3."+str(n+20)+":/nas /mnt/nas'"
+                os.system(comando)
 
 
 print("-----------------------------------------------------------------------")
 print("------------------------ Configurando Nagios --------------------------")
 
-# Salimos del modo superusuario
-# os.system("exit")
-
 # Por si acaso hago un update e instalo sshpass por si tengo que luego conectarme a esa terminal.
-os.system("sudo su -c 'apt-get update'")
-os.system("sudo su -c 'apt-get install sshpass'")
-os.system("sudo su -c 'apt-get install nano'")
+os.system("sudo apt-get update")
+os.system("sudo apt-get install sshpass")
+os.system("sudo apt-get install nano")
 
 # Configuro la terminal nagios para la monitorizacion.
 os.system("sudo su -c 'lxc-attach -n nagios -- apt-get update'")
@@ -83,12 +80,10 @@ os.system("sudo su -c 'lxc-attach -n nagios -- service apache2 restart'")
 
 # Ahora cargamos los ficheros de configuracion para los servidores.
 for n in range (1, 5):
-	os.system("sudo su -c 'lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/s"+str(n)+"_nagios2.cfg'")
-	os.system("sudo su -c 'lxc-attach -n nagios -- mv s"+str(n)+"_nagios2.cfg /etc/nagios3/conf.d/s"+str(n)+"_nagios2.conf'")
+	os.system("sudo su -c 'lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/s"+str(n)+"_nagios2.cfg -P /etc/nagios3/conf.d'")
 
 # Remplazamos el fichero de hostgroups
-os.system("sudo su -c 'lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hostgroups_nagios2.cfg'")
-os.system("sudo su -c 'lxc-attach -n nagios -- mv -f hostgroups_nagios2.cfg /etc/nagios3/conf.d/hostgroups_nagios2.cfg'")
+os.system("sudo su -c 'lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hostgroups_nagios2.cfg -P /etc/nagios3/conf.d'")
 
 # Reiniciamos nagios3 y apache2
 os.system("sudo su -c 'lxc-attach -n nagios -- service nagios3 restart'")
@@ -99,5 +94,6 @@ print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
 # Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario
+
 
 
