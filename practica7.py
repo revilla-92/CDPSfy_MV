@@ -92,6 +92,9 @@ os.system("lxc-attach -n nagios -- rm -rf /etc/nagios3/conf.d/hostgroups_nagios2
 os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hostgroups_nagios2.cfg")
 os.system("lxc-attach -n nagios -- mv hostgroups_nagios2.cfg /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
 
+# Reiniciamos nagios3
+os.system("lxc-attach -n nagios -- service nagios3 restart")
+
 
 print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
