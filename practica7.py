@@ -82,25 +82,18 @@ os.system("lxc-attach -n nagios -- apt-get install apache2 -y")
 os.system("lxc-attach -n nagios -- apt-get install nagios3 -y")
 os.system("lxc-attach -n nagios -- service apache2 restart")
 
-# Ahora configuramos los ficheros de configuracion para los logs.
-
+# Ahora cargamos los ficheros de configuracion para los servidores.
 for n in range (1, 5):
-	os.system("lxc-attach -n nagios -- cp /etc/nagios3/conf.d/localhost_nagios2.cfg /etc/nagios3/conf.d/s1_nagios2.cfg")
+	os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/s"+n+"_nagios2.cfg")
+	os.system("lxc-attach -n nagios -- mv s"+n+"_nagios2.cfg /etc/nagios3/conf.d/s"+n+"_nagios2.conf")
 
-
-
-
-
-
-# Por si necesitamos conectarnos de forma directa a otra terminal.
-# os.system("sshpass -p 'xxxx' ssh -o StrictHostKeyChecking=no root@nagios")
-
+# Remplazamos el fichero de hostgroups
+os.system("lxc-attach -n nagios -- rm -rf /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
+os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hostgroups_nagios2.cfg")
+os.system("lxc-attach -n nagios -- mv hostgroups_nagios2.cfg /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
 
 
 print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
+
 # Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario
-
-
-
-
