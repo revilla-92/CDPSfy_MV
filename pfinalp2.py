@@ -99,13 +99,13 @@ os.system("rm -rf /etc/hosts")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hosts -P /etc")
 
 os.system("lxc-attach -n s4 apt-get update")
-os.system("lxc-attach -n s4 apt-get install software-properties-common -y")
-os.system("lxc-attach -n s4 apt-get install git -y")
-os.system("lxc-attach -n s4 apt-get install make g++ -y")
-os.system("lxc-attach -n s4 apt-get install python-software-properties -y")
+os.system("lxc-attach -n s4 apt-get install software-properties-common")
+os.system("lxc-attach -n s4 apt-get install git")
+os.system("lxc-attach -n s4 apt-get install make g++")
+os.system("lxc-attach -n s4 apt-get install python-software-properties")
 os.system("lxc-attach -n s4 add-apt-repository ppa:chris-lea/node.js")
 os.system("lxc-attach -n s4 apt-get update")
-os.system("lxc-attach -n s4 apt-get install nodejs -y")
+os.system("lxc-attach -n s4 apt-get install nodejs")
 
 os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy")
 os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install'")
@@ -113,9 +113,9 @@ os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install'")
 # Esto deja colgado el script hacerlo con un xterm --> Ver practica final 1.
 
 # Abrimos la consola textual de cada MVs con el siguiente comando.
-comando = 'cd /CDPSfy/ && npm start'
-comando1 = 'xterm -e "lxc-attach -n s4 --sh -c ' + comando + '"'
-os.system(comando1)
+comando10 = 'cd /CDPSfy/ && npm start'
+comando11 = 'xterm -e "lxc-attach -n s4 --sh -c ' + comando10 + '"'
+os.system(comando11)
 
 #comando = "lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'"
 #comando1 = 'xterm -e '+ comando +''
