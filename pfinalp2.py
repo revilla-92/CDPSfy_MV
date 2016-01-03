@@ -57,10 +57,10 @@ for n in range(1, 5):
 
         if(n == 4):
                 comando1 = "sudo su -c 'lxc-attach -n s"+str(n)+" -- mount -t glusterfs 10.1.3."+str(n+19)+":/nas /mnt/nas'"
-                os.system(comando)
+                os.system(comando1)
         else:
                 comando1 = "sudo su -c 'lxc-attach -n s"+str(n)+" -- mount -t glusterfs 10.1.3."+str(n+20)+":/nas /mnt/nas'"
-                os.system(comando)
+                os.system(comando1)
 
 
 print("-----------------------------------------------------------------------")
@@ -92,10 +92,11 @@ os.system("sudo su -c 'lxc-attach -n nagios -- service apache2 restart'")
 
 
 print("-----------------------------------------------------------------------")
-print("-------------------- Configuracion de Servidor ------------------------")
+print("--------------------- Configuracion de Server -------------------------")
 
 os.system("sudo su -c 'lxc-attach -n s4 apt-get update'")
-os.system("sudo su -c 'lxc-attach -n s4 apt-get install software-properties-common -y RUN apt-get install git -y'")
+os.system("sudo su -c 'lxc-attach -n s4 apt-get install software-properties-common -y'")
+os.system("sudo su -c 'lxc-attach -n s4 apt-get install git -y'")
 os.system("sudo su -c 'lxc-attach -n s4 apt-get install make g++ -y'")
 os.system("sudo su -c 'lxc-attach -n s4 apt-get install python-software-properties -y'")
 os.system("sudo su -c 'lxc-attach -n s4 add-apt-repository ppa:chris-lea/node.js'")
@@ -104,15 +105,36 @@ os.system("sudo su -c 'lxc-attach -n s4 apt-get install nodejs -y'")
 
 os.system("sudo su -c 'lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy'")
 
-os.system("sudo su -c 'lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install''")
+os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install'")
 
-os.system("sudo su -c 'lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start''")
+# Esto deja colgado el script hacerlo con un xterm --> Ver practica final 1.
 
+# Abrimos la consola textual de cada MVs con el siguiente comando.
+comando = 'cd /CDPSfy/ && npm start'
+comando1 = 'xterm -e "lxc-attach -n s4 --sh -c ' + comando + '"'
+os.system(comando1)
+
+#comando = "lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'"
+#comando1 = 'xterm -e '+ comando +''
+#os.system(comando1)
+
+# os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'")
+
+
+print("-----------------------------------------------------------------------")
+print("--------------------- Configuracion de Tracks -------------------------")
+
+for n in range(1, 4):
+        os.system("sudo su -c 'lxc-attach -n s"+n+" service apache2 start'")
+
+# Redirecciona cuando llamamos a tracks al contenido del directorio.
+os.system("lxc-attach -n s4 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")
 
 print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
-# Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario
+# Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario --> Hacerlo en un xterm
+#os.system("lxc-attach -n s4 'xr --verbose --server tcp:0:80 --backend 10.1.2.11:80 --backend 10.1.2.12:80 --backend 10.1.2.13:80 --web-interface 0:8001'")
 
 
 
