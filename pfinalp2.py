@@ -98,17 +98,16 @@ print("--------------------- Configuracion de Server -------------------------")
 os.system("rm -rf /etc/hosts")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hosts -P /etc")
 
-os.system("sudo su -c 'lxc-attach -n s4 apt-get update'")
-os.system("sudo su -c 'lxc-attach -n s4 apt-get install software-properties-common -y'")
-os.system("sudo su -c 'lxc-attach -n s4 apt-get install git -y'")
-os.system("sudo su -c 'lxc-attach -n s4 apt-get install make g++ -y'")
-os.system("sudo su -c 'lxc-attach -n s4 apt-get install python-software-properties -y'")
-os.system("sudo su -c 'lxc-attach -n s4 add-apt-repository ppa:chris-lea/node.js'")
-os.system("sudo su -c 'lxc-attach -n s4 apt-get update'")
-os.system("sudo su -c 'lxc-attach -n s4 apt-get install nodejs -y'")
+os.system("lxc-attach -n s4 apt-get update")
+os.system("lxc-attach -n s4 apt-get install software-properties-common -y")
+os.system("lxc-attach -n s4 apt-get install git -y")
+os.system("lxc-attach -n s4 apt-get install make g++ -y")
+os.system("lxc-attach -n s4 apt-get install python-software-properties -y")
+os.system("lxc-attach -n s4 add-apt-repository ppa:chris-lea/node.js")
+os.system("lxc-attach -n s4 apt-get update")
+os.system("lxc-attach -n s4 apt-get install nodejs -y")
 
-os.system("sudo su -c 'lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy'")
-
+os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy")
 os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install'")
 
 # Esto deja colgado el script hacerlo con un xterm --> Ver practica final 1.
@@ -133,7 +132,7 @@ print("-----------------------------------------------------------------------")
 print("--------------------- Configuracion de Tracks -------------------------")
 
 for n in range(1, 4):
-        os.system("sudo su -c 'lxc-attach -n s"+n+" service apache2 start'")
+        os.system("sudo su -c 'lxc-attach -n s"+str(n)+" service apache2 start'")
 
 # Redirecciona cuando llamamos a tracks al contenido del directorio.
 os.system("lxc-attach -n s4 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")
