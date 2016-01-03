@@ -94,6 +94,10 @@ os.system("sudo su -c 'lxc-attach -n nagios -- service apache2 restart'")
 print("-----------------------------------------------------------------------")
 print("--------------------- Configuracion de Server -------------------------")
 
+# Configuramos el fichero hosts para que redirija las direccionas web.
+os.system("rm -rf /etc/hosts")
+os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hosts -P /etc")
+
 os.system("sudo su -c 'lxc-attach -n s4 apt-get update'")
 os.system("sudo su -c 'lxc-attach -n s4 apt-get install software-properties-common -y'")
 os.system("sudo su -c 'lxc-attach -n s4 apt-get install git -y'")
@@ -117,6 +121,10 @@ os.system(comando1)
 #comando = "lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'"
 #comando1 = 'xterm -e '+ comando +''
 #os.system(comando1)
+
+# Abrimos la consola textual de cada MVs con el siguiente comando.
+#comando = 'xterm -e "sudo virsh console ' + i + '" &'
+#os.system(comando)
 
 # os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'")
 
