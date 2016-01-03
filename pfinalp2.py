@@ -92,6 +92,24 @@ os.system("sudo su -c 'lxc-attach -n nagios -- service apache2 restart'")
 
 
 print("-----------------------------------------------------------------------")
+print("-------------------- Configuracion de Servidor ------------------------")
+
+os.system("sudo su -c 'lxc-attach -n s4 apt-get update'")
+os.system("sudo su -c 'lxc-attach -n s4 apt-get install software-properties-common -y RUN apt-get install git -y'")
+os.system("sudo su -c 'lxc-attach -n s4 apt-get install make g++ -y'")
+os.system("sudo su -c 'lxc-attach -n s4 apt-get install python-software-properties -y'")
+os.system("sudo su -c 'lxc-attach -n s4 add-apt-repository ppa:chris-lea/node.js'")
+os.system("sudo su -c 'lxc-attach -n s4 apt-get update'")
+os.system("sudo su -c 'lxc-attach -n s4 apt-get install nodejs -y'")
+
+os.system("sudo su -c 'lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy'")
+
+os.system("sudo su -c 'lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install''")
+
+os.system("sudo su -c 'lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start''")
+
+
+print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
 # Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario
