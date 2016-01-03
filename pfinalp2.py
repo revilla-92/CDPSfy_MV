@@ -110,21 +110,7 @@ os.system("lxc-attach -n s4 apt-get install nodejs")
 os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy")
 os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install'")
 
-# Esto deja colgado el script hacerlo con un xterm --> Ver practica final 1.
-
-# Abrimos la consola textual de cada MVs con el siguiente comando.
-comando10 = 'cd /CDPSfy/ && npm start'
-comando11 = 'xterm -e "lxc-attach -n s4 --sh -c ' + comando10 + '"'
-os.system(comando11)
-
-#comando = "lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'"
-#comando1 = 'xterm -e '+ comando +''
-#os.system(comando1)
-
-# Abrimos la consola textual de cada MVs con el siguiente comando.
-#comando = 'xterm -e "sudo virsh console ' + i + '" &'
-#os.system(comando)
-
+# Arrancamos el servidor en s4.
 # os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'")
 
 
@@ -135,13 +121,14 @@ for n in range(1, 4):
         os.system("sudo su -c 'lxc-attach -n s"+str(n)+" service apache2 start'")
 
 # Redirecciona cuando llamamos a tracks al contenido del directorio.
-os.system("lxc-attach -n s4 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")
+os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")
+
 
 print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
 # Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario --> Hacerlo en un xterm
-#os.system("lxc-attach -n s4 'xr --verbose --server tcp:0:80 --backend 10.1.2.11:80 --backend 10.1.2.12:80 --backend 10.1.2.13:80 --web-interface 0:8001'")
+# os.system("lxc-attach -n s4 'xr --verbose --server tcp:0:80 --backend 10.1.2.11:80 --backend 10.1.2.12:80 --backend 10.1.2.13:80 --web-interface 0:8001'")
 
 
 
