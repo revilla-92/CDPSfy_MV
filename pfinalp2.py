@@ -98,18 +98,22 @@ print("--------------------- Configuracion de Server -------------------------")
 os.system("rm -rf /etc/hosts")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hosts -P /etc")
 
-for range (1, 5):
-        os.system("lxc-attach -n s"+str(n)+" sudo apt-get update")
-        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install software-properties-common -y")
-        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install git -y")
-        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install make g++ -y")
-        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install python-software-properties -y")
-        os.system("lxc-attach -n s"+str(n)+" sudo add-apt-repository ppa:chris-lea/node.js")
-        os.system("lxc-attach -n s"+str(n)+" sudo apt-get update")
-        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install nodejs -y")
+for n in range (1, 5):
+        os.system("lxc-attach -n s"+str(n)+" apt-get update")
+        os.system("lxc-attach -n s"+str(n)+" apt-get install software-properties-common")
+        os.system("lxc-attach -n s"+str(n)+" apt-get install git")
+        os.system("lxc-attach -n s"+str(n)+" apt-get install make g++")
+        os.system("lxc-attach -n s"+str(n)+" apt-get install python-software-properties")
+        os.system("lxc-attach -n s"+str(n)+" add-apt-repository ppa:chris-lea/node.js")
+        os.system("lxc-attach -n s"+str(n)+" apt-get update")
+        os.system("lxc-attach -n s"+str(n)+" apt-get install nodejs")
 
-os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy")
-os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install'")        
+for i in range (1, 4):
+        os.system("lxc-attach -n s"+str(i)+" git clone https://github.com/revilla-92/CDPSfy_Tracks")
+        os.system("lxc-attach -n s"+str(i)+" -- sh -c 'cd /CDPSfy_Tracks/ && npm install'")
+
+os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy_Server")
+os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm install'")        
 
 # Arrancamos el servidor en s4.
 # os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'")
