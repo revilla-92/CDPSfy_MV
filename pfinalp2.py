@@ -125,7 +125,7 @@ print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
 # Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario --> Hacerlo en un xterm
-# os.system("lxc-attach -n lb 'xr --verbose --server tcp:0:80 --backend 10.1.2.11:80 --backend 10.1.2.12:80 --backend 10.1.2.13:80 --web-interface 0:8001'")
+# os.system("lxc-attach -n lb 'xr --verbose --server tcp:0:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001'")
 
 
 
