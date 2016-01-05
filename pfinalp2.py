@@ -92,7 +92,7 @@ os.system("lxc-attach -n nagios -- service apache2 restart")
 
 
 print("-----------------------------------------------------------------------")
-print("--------------------- Configuracion de Server -------------------------")
+print("----------------- Configuracion de Server Y Tracks --------------------")
 
 # Configuramos el fichero hosts para que redirija las direccionas web.
 os.system("rm -rf /etc/hosts")
@@ -113,21 +113,13 @@ for i in range (1, 4):
         os.system("lxc-attach -n s"+str(i)+" -- sh -c 'cd /CDPSfy_Tracks/ && npm install'")
 
 os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy_Server")
-os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm install'")        
+os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm install'")
+
+# Redirecciona cuando llamamos a tracks al contenido del directorio.
+os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")       
 
 # Arrancamos el servidor en s4.
 # os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'")
-
-
-print("-----------------------------------------------------------------------")
-print("--------------------- Configuracion de Tracks -------------------------")
-
-for n in range(1, 4):
-        os.system("lxc-attach -n s"+str(n)+" service apache2 start")
-
-# Redirecciona cuando llamamos a tracks al contenido del directorio.
-os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")
-
 
 print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
