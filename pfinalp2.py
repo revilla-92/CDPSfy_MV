@@ -98,17 +98,18 @@ print("--------------------- Configuracion de Server -------------------------")
 os.system("rm -rf /etc/hosts")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hosts -P /etc")
 
-os.system("lxc-attach -n s4 apt-get update")
-os.system("lxc-attach -n s4 apt-get install software-properties-common")
-os.system("lxc-attach -n s4 apt-get install git")
-os.system("lxc-attach -n s4 apt-get install make g++")
-os.system("lxc-attach -n s4 apt-get install python-software-properties")
-os.system("lxc-attach -n s4 add-apt-repository ppa:chris-lea/node.js")
-os.system("lxc-attach -n s4 apt-get update")
-os.system("lxc-attach -n s4 apt-get install nodejs")
+for range (1, 5):
+        os.system("lxc-attach -n s"+str(n)+" sudo apt-get update")
+        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install software-properties-common -y")
+        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install git -y")
+        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install make g++ -y")
+        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install python-software-properties -y")
+        os.system("lxc-attach -n s"+str(n)+" sudo add-apt-repository ppa:chris-lea/node.js")
+        os.system("lxc-attach -n s"+str(n)+" sudo apt-get update")
+        os.system("lxc-attach -n s"+str(n)+" sudo apt-get install nodejs -y")
 
 os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy")
-os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install'")
+os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm install'")        
 
 # Arrancamos el servidor en s4.
 # os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'")
@@ -128,7 +129,7 @@ print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
 # Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario --> Hacerlo en un xterm
-# os.system("lxc-attach -n s4 'xr --verbose --server tcp:0:80 --backend 10.1.2.11:80 --backend 10.1.2.12:80 --backend 10.1.2.13:80 --web-interface 0:8001'")
+# os.system("lxc-attach -n lb 'xr --verbose --server tcp:0:80 --backend 10.1.2.11:80 --backend 10.1.2.12:80 --backend 10.1.2.13:80 --web-interface 0:8001'")
 
 
 
