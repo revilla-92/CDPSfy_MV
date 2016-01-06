@@ -98,17 +98,10 @@ print("----------------- Configuracion de Server Y Tracks --------------------")
 os.system("rm -rf /etc/hosts")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hosts -P /etc")
 
-# IMPORTANTE: Probar a hacer la instalacion automatizada de node con un script aparte, descargandolo y ejecutandolo.
-# Instalamos node en todos los servidores.
+# Instalamos node en todos los servidores descargando y ejecutando un script aparte desde cada servidor.
 for n in range (1, 5):
-        os.system("lxc-attach -n s"+str(n)+" apt-get update")
-        os.system("lxc-attach -n s"+str(n)+" apt-get install software-properties-common")
-        os.system("lxc-attach -n s"+str(n)+" apt-get install git")
-        os.system("lxc-attach -n s"+str(n)+" apt-get install make g++")
-        os.system("lxc-attach -n s"+str(n)+" apt-get install python-software-properties")
-        os.system("lxc-attach -n s"+str(n)+" add-apt-repository ppa:chris-lea/node.js")
-        os.system("lxc-attach -n s"+str(n)+" apt-get update")
-        os.system("lxc-attach -n s"+str(n)+" apt-get install nodejs")
+        os.system("lxc-attach -n s"+str(n)+" wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/pfinalp2_node.py")
+        os.system("lxc-attach -n s"+str(n)+" python pfinalp2_node.py")
 
 # Clonamos y arrancamos la aplicacion Tracks en los servidores.
 for i in range (1, 4):
@@ -131,7 +124,7 @@ print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
 # Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario --> Hacerlo en un xterm
-# os.system("lxc-attach -n lb 'xr --verbose --server tcp:0:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001'")
+os.system("xterm -hold -e 'lxc-attach -n lb -- xr --verbose --server tcp:0:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001'")
 
 
 print("-----------------------------------------------------------------------")
