@@ -98,6 +98,7 @@ print("----------------- Configuracion de Server Y Tracks --------------------")
 os.system("rm -rf /etc/hosts")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hosts -P /etc")
 
+# Instalamos node en todos los servidores.
 for n in range (1, 5):
         os.system("lxc-attach -n s"+str(n)+" apt-get update")
         os.system("lxc-attach -n s"+str(n)+" apt-get install software-properties-common")
@@ -108,18 +109,20 @@ for n in range (1, 5):
         os.system("lxc-attach -n s"+str(n)+" apt-get update")
         os.system("lxc-attach -n s"+str(n)+" apt-get install nodejs")
 
+# Clonamos y arrancamos la aplicacion Tracks en los servidores.
 for i in range (1, 4):
         os.system("lxc-attach -n s"+str(i)+" git clone https://github.com/revilla-92/CDPSfy_Tracks")
         os.system("lxc-attach -n s"+str(i)+" -- sh -c 'cd /CDPSfy_Tracks/ && npm install'")
+        os.system('xterm -hold -e "lxc-attach -n s+'str(i)'+ -- sh -c "cd /CDPSfy_Tracks/ && node app.js"" &')
 
+# Clonamos y arrancamos la aplicacion Server en el servidor.
 os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy_Server")
 os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm install'")
+os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c "cd /CDPSfy_Server/ && npm start"" &')
 
 # Redirecciona cuando llamamos a tracks al contenido del directorio.
 os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")       
 
-# Arrancamos el servidor en s4.
-# os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy/ && npm start'")
 
 print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
@@ -128,4 +131,6 @@ print("------------------- Configurando y Arrancando LB ----------------------")
 # os.system("lxc-attach -n lb 'xr --verbose --server tcp:0:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001'")
 
 
+print("-----------------------------------------------------------------------")
+print("------------------------- Script Finalizado ---------------------------")
 
