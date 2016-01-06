@@ -98,6 +98,7 @@ print("----------------- Configuracion de Server Y Tracks --------------------")
 os.system("rm -rf /etc/hosts")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hosts -P /etc")
 
+# IMPORTANTE: Probar a hacer la instalacion automatizada de node con un script aparte, descargandolo y ejecutandolo.
 # Instalamos node en todos los servidores.
 for n in range (1, 5):
         os.system("lxc-attach -n s"+str(n)+" apt-get update")
@@ -114,7 +115,7 @@ for i in range (1, 4):
         os.system("lxc-attach -n s"+str(i)+" git clone https://github.com/revilla-92/CDPSfy_Tracks")
         os.system("lxc-attach -n s"+str(i)+" -- sh -c 'cd /CDPSfy_Tracks/ && npm install'")
         comando2 = "'cd /CDPSfy_Tracks/ && node app.js'"
-        os.system('xterm -hold -e "lxc-attach -n s'+str(i)+'+ -- sh -c '+comando2+'" &')
+        os.system('xterm -hold -e "lxc-attach -n s'+str(i)+' -- sh -c '+comando2+'" &')
 
 # Clonamos y arrancamos la aplicacion Server en el servidor.
 os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy_Server")
