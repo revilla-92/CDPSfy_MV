@@ -68,7 +68,6 @@ print("------------------------ Configurando Nagios --------------------------")
 
 # Por si acaso hago un update e instalo sshpass por si tengo que luego conectarme a esa terminal.
 os.system("sudo apt-get update")
-os.system("sudo apt-get install sshpass")
 os.system("sudo apt-get install nano")
 
 # Configuro la terminal nagios para la monitorizacion.
@@ -100,18 +99,19 @@ os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/ho
 
 # Instalamos node en todos los servidores descargando y ejecutando un script aparte desde cada servidor.
 for n in range (1, 5):
-        os.system("lxc-attach -n s"+str(n)+" wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/pfinalp2_node.py")
-        os.system("lxc-attach -n s"+str(n)+" python pfinalp2_node.py")
+        os.system("lxc-attach -n s"+str(n)+" -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/pfinalp2_node.py")
+        os.system("lxc-attach -n s"+str(n)+" -- python pfinalp2_node.py")
+        os.system("lxc-attach -n s"+str(n)+" -- apt-get install nano")
 
 # Clonamos y arrancamos la aplicacion Tracks en los servidores.
 for i in range (1, 4):
-        os.system("lxc-attach -n s"+str(i)+" git clone https://github.com/revilla-92/CDPSfy_Tracks")
+        os.system("lxc-attach -n s"+str(i)+" -- git clone https://github.com/revilla-92/CDPSfy_Tracks")
         os.system("lxc-attach -n s"+str(i)+" -- sh -c 'cd /CDPSfy_Tracks/ && npm install'")
         comando2 = "'cd /CDPSfy_Tracks/ && node app.js'"
         os.system('xterm -hold -e "lxc-attach -n s'+str(i)+' -- sh -c '+comando2+'" &')
 
 # Clonamos y arrancamos la aplicacion Server en el servidor.
-os.system("lxc-attach -n s4 git clone https://github.com/revilla-92/CDPSfy_Server")
+os.system("lxc-attach -n s4 -- git clone https://github.com/revilla-92/CDPSfy_Server")
 os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm install'")
 comando3 = "'cd /CDPSfy_Server/ && npm start'"
 os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
@@ -123,7 +123,7 @@ os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")
 print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
-# Esto dejará la terminal inutilizada, no detener el proceso o se saldrá del escenario --> Hacerlo en un xterm
+# Arrancamos el baleanceador de carga en una terminal aparte balanceado a s1, s2 y s3 por el puerto 3030 que es donde hemos puesto a escuchar tracks.cdpsfy.es.
 os.system("xterm -hold -e 'lxc-attach -n lb -- xr --verbose --server tcp:0:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001' &")
 
 
