@@ -106,15 +106,16 @@ for n in range (1, 5):
 # Clonamos y arrancamos la aplicacion Tracks en los servidores.
 for i in range (1, 4):
         os.system("lxc-attach -n s"+str(i)+" -- git clone https://github.com/revilla-92/CDPSfy_Tracks")
-        os.system("lxc-attach -n s"+str(i)+" -- sh -c 'cd /CDPSfy_Tracks/ && npm install'")
+        # os.system("lxc-attach -n s"+str(i)+" -- sh -c 'cd /CDPSfy_Tracks/ && npm install'")
         comando2 = "'cd /CDPSfy_Tracks/ && node app.js'"
         os.system('xterm -hold -e "lxc-attach -n s'+str(i)+' -- sh -c '+comando2+'" &')
 
-# Clonamos y arrancamos la aplicacion Server en el servidor.
+# Clonamos y arrancamos la aplicacion Server en el servidor. Asi mismo creamos /data/db para la mejora de MongoDB.
 os.system("lxc-attach -n s4 -- git clone https://github.com/revilla-92/CDPSfy_Server")
-os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm install'")
-comando3 = "'cd /CDPSfy_Server/ && npm start'"
-os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
+os.system("lxc-attach -n s4 -- mkdir -p /data/db")
+#os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm install'")
+#comando3 = "'cd /CDPSfy_Server/ && npm start'"
+#os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
 
 # Redirecciona cuando llamamos a tracks al contenido del directorio.
 os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")       
