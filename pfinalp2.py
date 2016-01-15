@@ -7,11 +7,16 @@
 ######################################################################################
 
 # Importamos las bibliotecas que vamos a usar.
+import time
 import sys
 import os
 
+
 print("-----------------------------------------------------------------------")
 print("------------------------- Empieza el script ---------------------------")
+
+# Guardamos el instante inicial de ejecucion del script para saber el tiempo de ejecucion al final:
+start_time = time.time()
 
 # Eliminamos si existe el directorio de trabajo para volver a importar los ficheros.
 if (os.path.isdir("CDPS")):
@@ -134,6 +139,9 @@ print("------------------- Configurando y Arrancando LB ----------------------")
 # Arrancamos el baleanceador de carga en una terminal aparte balanceado a s1, s2 y s3 por el puerto 3030 que es donde hemos puesto a escuchar tracks.cdpsfy.es.
 os.system("xterm -hold -e 'lxc-attach -n lb -- xr --verbose --server tcp:0:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001' &")
 
+
+# Imprimimos el tiempo que ha tardado en ejecutarse el script total:
+print("---------------------------- %s seconds ----------------------------" % (time.time() - start_time))
 
 print("-----------------------------------------------------------------------")
 print("------------------------- Script Finalizado ---------------------------")
