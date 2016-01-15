@@ -14,13 +14,13 @@ print("-----------------------------------------------------------------------")
 print("------------------------- Empieza el script ---------------------------")
 
 # Eliminamos si existe el directorio de trabajo para volver a importar los ficheros.
-if (os.path.isdir("cdps")):
-        os.system("rm -rf cdps")
+if (os.path.isdir("CDPS")):
+        os.system("rm -rf CDPS")
 
 
 # Creamos el directorio de trabajo.
-os.system("mkdir cdps")
-os.chdir("cdps")
+os.system("mkdir CDPS")
+os.chdir("CDPS")
 os.system("wget http://idefix.dit.upm.es/download/cdps/p7/p7.tgz")
 os.system("tar xfvz p7.tgz")
 os.chdir("p7")
