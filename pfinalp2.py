@@ -79,11 +79,11 @@ os.system("lxc-attach -n nagios -- service apache2 restart")
 
 # Ahora cargamos los ficheros de configuracion para los servidores.
 for n in range (1, 5):
-	os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/s"+str(n)+"_nagios2.cfg -P /etc/nagios3/conf.d")
+	os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/s"+str(n)+"_nagios2.cfg -P /etc/nagios3/conf.d")
 
 # Remplazamos el fichero de hostgroups
 os.system("lxc-attach -n nagios -- rm -rf /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
-os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hostgroups_nagios2.cfg -P /etc/nagios3/conf.d")
+os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/hostgroups_nagios2.cfg -P /etc/nagios3/conf.d")
 
 # Reiniciamos nagios3 y apache2
 os.system("lxc-attach -n nagios -- service nagios3 restart")
@@ -95,7 +95,11 @@ print("----------------- Configuracion de Server Y Tracks --------------------")
 
 # Configuramos el fichero hosts para que redirija las direccionas web.
 os.system("rm -rf /etc/hosts")
-os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/hosts -P /etc")
+os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Hosts_MV/Anfitrion/hosts -P /etc")
+
+# Configuramos el fichero hosts de s4 para que redirija correctamente las direcciones web.
+os.system("lxc-attach -n s4 -- rm -rf /etc/hosts")
+os.system("lxc-attach -n s4 -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Hosts_MV/s4/hosts -P /etc")
 
 # Instalamos node en todos los servidores descargando y ejecutando un script aparte desde cada servidor.
 for n in range (1, 5):
@@ -106,16 +110,19 @@ for n in range (1, 5):
 # Clonamos y arrancamos la aplicacion Tracks en los servidores.
 for i in range (1, 4):
         os.system("lxc-attach -n s"+str(i)+" -- git clone https://github.com/revilla-92/CDPSfy_Tracks")
-        # os.system("lxc-attach -n s"+str(i)+" -- sh -c 'cd /CDPSfy_Tracks/ && npm install'")
         comando2 = "'cd /CDPSfy_Tracks/ && node app.js'"
         os.system('xterm -hold -e "lxc-attach -n s'+str(i)+' -- sh -c '+comando2+'" &')
 
 # Clonamos y arrancamos la aplicacion Server en el servidor. Asi mismo creamos /data/db para la mejora de MongoDB.
 os.system("lxc-attach -n s4 -- git clone https://github.com/revilla-92/CDPSfy_Server")
 os.system("lxc-attach -n s4 -- mkdir -p /data/db")
-#os.system("lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm install'")
-#comando3 = "'cd /CDPSfy_Server/ && npm start'"
-#os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
+
+# Este comando lo hacemos para ejecutar el comando npm start en una nueva terminal:
+# El comando completo seria: xterm -hold -e "lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm start'" &
+
+# Para realizarlo mediante python tenemos que dividirlo de la siguiente forma: 
+# comando3 = "'cd /CDPSfy_Server/ && npm start'"
+# os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
 
 # Redirecciona cuando llamamos a tracks al contenido del directorio.
 os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")       
