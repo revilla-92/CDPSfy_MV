@@ -90,6 +90,8 @@ for n in range(1, 5):
         else:
                 os.system("lxc-attach -n s"+str(n)+" -- mount -t glusterfs 10.1.3."+str(n+20)+":/nas /mnt/nas")
 
+print("Ejecutado con exito")
+
 
 print("-----------------------------------------------------------------------")
 print("------------------------ Configurando Nagios --------------------------")
@@ -147,6 +149,10 @@ os.system("lxc-attach -n s4 -- chmod +rwx /data/db")
 
 # Deberemos meter en s4 este comando para arrancar la BBDD.
 # os.system("lxc-attach -n s4 -- mongod > /dev/null 2>&1 &")
+
+os.system("lxc-attach -n s4 -- wget https://github.com/revilla-92/CDPSfy_MV/blob/master/pfinalp2_mongod.sh -P /")
+os.system("lxc-attach -n s4 -- chmod +rwx /pfinalp2_mongod.sh")
+os.system("lxc-attach -n s4 -- ./pfinalp2_mongod.sh")
 
 # Este comando lo hacemos para ejecutar el comando npm start en una nueva terminal:
 # El comando completo seria: xterm -hold -e "lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm start'" &
