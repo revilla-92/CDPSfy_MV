@@ -34,7 +34,7 @@ else:
         print "No ha seleccionado ninguna opcion. Si desea activar nagios ponga -nagios. Por defecto no se arrancara Nagios."
 
 # Paramos la ejecucion del Script 5 segundos para que de tiempo a leer los mensajes de ayuda.
-time.sleep(7)
+time.sleep(5)
 
 # Actualizamos el anfitrion e instalamos nano para poder editar ficheros.
 os.system("sudo apt-get update")
