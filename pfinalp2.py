@@ -18,6 +18,32 @@ print("------------------------- Empieza el script ---------------------------")
 # Guardamos el instante inicial de ejecucion del script para saber el tiempo de ejecucion al final:
 start_time = time.time()
 
+# Por defecto no arrancamos la monitorizacion de Nagios.
+nagios = False
+
+# Si añadimos en la ejecucion del comando "python pfinalp2.py -nagios" se activara nagios.
+# Damos la opcion de seleccionar o no Nagios ya que la instalacion de Nagios detendra la ejecucion del script.
+if (len(sys.argv) == 2):
+        opcion = sys.argv[1]
+        print "La opcion seleccionada ha sido: " + opcion
+        if (opcion == "-nagios"):
+                nagios = True
+        else:
+                sys.exit("Si desea arrancar Nagios debe utilizar -nagios")
+else:
+        print "No ha seleccionado ninguna opcion. Si desea activar nagios ponga -nagios. Por defecto no se arrancara Nagios."
+
+# Paramos la ejecucion del Script 5 segundos para que de tiempo a leer los mensajes de ayuda.
+time.sleep(5)
+
+# Actualizamos el anfitrion e instalamos nano para poder editar ficheros.
+os.system("sudo apt-get update")
+os.system("sudo apt-get install nano")
+
+
+print("-----------------------------------------------------------------------")
+print("-------------------- Creando escenario de trabajo ---------------------")
+
 # Eliminamos si existe el directorio de trabajo para volver a importar los ficheros.
 if (os.path.isdir("CDPS")):
         os.system("rm -rf CDPS")
@@ -71,28 +97,27 @@ for n in range(1, 5):
 print("-----------------------------------------------------------------------")
 print("------------------------ Configurando Nagios --------------------------")
 
-# Por si acaso hago un update e instalo sshpass por si tengo que luego conectarme a esa terminal.
-os.system("sudo apt-get update")
-os.system("sudo apt-get install nano")
+# Solo si se ha activado la opcion de Nagios configuramos nagios.
+if (nagios):
+        
+        # Configuro la terminal nagios para la monitorizacion.
+        os.system("lxc-attach -n nagios -- apt-get update")
+        os.system("lxc-attach -n nagios -- apt-get install nano")
+        os.system("lxc-attach -n nagios -- apt-get install apache2 -y")
+        os.system("lxc-attach -n nagios -- apt-get install nagios3 -y")
+        os.system("lxc-attach -n nagios -- service apache2 restart")
 
-# Configuro la terminal nagios para la monitorizacion.
-os.system("lxc-attach -n nagios -- apt-get update")
-os.system("lxc-attach -n nagios -- apt-get install nano")
-os.system("lxc-attach -n nagios -- apt-get install apache2 -y")
-os.system("lxc-attach -n nagios -- apt-get install nagios3 -y")
-os.system("lxc-attach -n nagios -- service apache2 restart")
+        # Ahora cargamos los ficheros de configuracion para los servidores.
+        for n in range (1, 5):
+        	os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/s"+str(n)+"_nagios2.cfg -P /etc/nagios3/conf.d")
 
-# Ahora cargamos los ficheros de configuracion para los servidores.
-for n in range (1, 5):
-	os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/s"+str(n)+"_nagios2.cfg -P /etc/nagios3/conf.d")
+        # Remplazamos el fichero de hostgroups
+        os.system("lxc-attach -n nagios -- rm -rf /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
+        os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/hostgroups_nagios2.cfg -P /etc/nagios3/conf.d")
 
-# Remplazamos el fichero de hostgroups
-os.system("lxc-attach -n nagios -- rm -rf /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
-os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/hostgroups_nagios2.cfg -P /etc/nagios3/conf.d")
-
-# Reiniciamos nagios3 y apache2
-os.system("lxc-attach -n nagios -- service nagios3 restart")
-os.system("lxc-attach -n nagios -- service apache2 restart")
+        # Reiniciamos nagios3 y apache2
+        os.system("lxc-attach -n nagios -- service nagios3 restart")
+        os.system("lxc-attach -n nagios -- service apache2 restart")
 
 
 print("-----------------------------------------------------------------------")
