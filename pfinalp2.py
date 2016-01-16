@@ -121,13 +121,13 @@ for i in range (1, 4):
 # Clonamos y arrancamos la aplicacion Server en el servidor. Asi mismo creamos /data/db para la mejora de MongoDB.
 os.system("lxc-attach -n s4 -- git clone https://github.com/revilla-92/CDPSfy_Server")
 os.system("lxc-attach -n s4 -- mkdir -p /data/db")
+os.system("lxc-attach -n s4 -- chmod +rwx /data/db")
+os.system("lxc-attach -n s4 -- mongod > /dev/null 2>&1 &")
 
 # Este comando lo hacemos para ejecutar el comando npm start en una nueva terminal:
 # El comando completo seria: xterm -hold -e "lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm start'" &
-
-# Para realizarlo mediante python tenemos que dividirlo de la siguiente forma: 
-# comando3 = "'cd /CDPSfy_Server/ && npm start'"
-# os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
+comando3 = "'cd /CDPSfy_Server/ && npm start'"
+os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
 
 # Redirecciona cuando llamamos a tracks al contenido del directorio.
 os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")       
@@ -141,7 +141,7 @@ os.system("xterm -hold -e 'lxc-attach -n lb -- xr --verbose --server tcp:0:80 --
 
 
 # Imprimimos el tiempo que ha tardado en ejecutarse el script total:
-print("---------------------------- %s seconds ----------------------------" % (time.time() - start_time))
+print("------------------------ %s seconds ------------------------" % (time.time() - start_time))
 
 print("-----------------------------------------------------------------------")
 print("------------------------- Script Finalizado ---------------------------")
