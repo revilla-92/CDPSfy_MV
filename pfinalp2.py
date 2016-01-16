@@ -147,12 +147,14 @@ for i in range (1, 4):
 os.system("lxc-attach -n s4 -- git clone https://github.com/revilla-92/CDPSfy_Server")
 os.system("lxc-attach -n s4 -- mkdir -p /data/db")
 os.system("lxc-attach -n s4 -- chmod +rwx /data/db")
-os.system("lxc-attach -n s4 -- mongod > /dev/null 2>&1 &")
+
+# Deberemos meter en s4 este comando para arrancar la BBDD.
+# os.system("lxc-attach -n s4 -- mongod > /dev/null 2>&1 &")
 
 # Este comando lo hacemos para ejecutar el comando npm start en una nueva terminal:
 # El comando completo seria: xterm -hold -e "lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm start'" &
-comando3 = "'cd /CDPSfy_Server/ && npm start'"
-os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
+# comando3 = "'cd /CDPSfy_Server/ && npm start'"
+# os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
 
 # Redirecciona cuando llamamos a tracks al contenido del directorio.
 os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")       
