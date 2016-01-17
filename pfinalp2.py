@@ -126,10 +126,6 @@ print("----------------- Configuracion de Server Y Tracks --------------------")
 os.system("rm -rf /etc/hosts")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Hosts_MV/Anfitrion/hosts -P /etc")
 
-# Configuramos el fichero hosts de s4 para que redirija correctamente las direcciones web.
-os.system("lxc-attach -n s4 -- rm -rf /etc/hosts")
-os.system("lxc-attach -n s4 -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Hosts_MV/s4/hosts -P /etc")
-
 # Instalamos node en todos los servidores descargando y ejecutando un script aparte desde cada servidor.
 for n in range (1, 5):
         os.system("lxc-attach -n s"+str(n)+" -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/pfinalp2_node.py")
@@ -142,32 +138,54 @@ for i in range (1, 4):
         comando2 = "'cd /CDPSfy_Tracks/ && node app.js'"
         os.system('xterm -hold -e "lxc-attach -n s'+str(i)+' -- sh -c '+comando2+'" &')
 
-# Clonamos y arrancamos la aplicacion Server en el servidor. Asi mismo creamos /data/db para la mejora de MongoDB.
-os.system("lxc-attach -n s4 -- git clone https://github.com/revilla-92/CDPSfy_Server")
-os.system("lxc-attach -n s4 -- mkdir -p /data/db")
-os.system("lxc-attach -n s4 -- chmod +rwx /data/db")
 
-# Deberemos meter en s4 este comando para arrancar la BBDD.
+######################################################################################################
+############################### IMPORTANTE: MEJORA ALTA DISPONIBILIDAD ###############################
+
+# Clonamos y configuramos la aplicacion Server en los servidores s3 y s4.
+for j in range (3, 5):
+
+        # Configuramos el fichero hosts de s3 y s4 para que redirija correctamente las direcciones web en la aplicacion CDPSfy_Server.
+        os.system("lxc-attach -n s"+ str(j) +" -- rm -rf /etc/hosts")
+        os.system("lxc-attach -n s"+ str(j) +" -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Hosts_MV/s"+ str(j) +"/hosts -P /etc")
+
+        # Creamos el directorio /covers que es donde se guardaran las caratulas dentro de los servidores:
+        os.system("lxc-attach -n s"+ str(j) +" -- mkdir -p /covers")
+
+        # Clonamos y arrancamos la aplicacion Server en el servidor. Asi mismo creamos /data/db para la mejora de MongoDB.
+        os.system("lxc-attach -n s"+ str(j) +" -- git clone https://github.com/revilla-92/CDPSfy_Server")
+        os.system("lxc-attach -n s"+ str(j) +" -- mkdir -p /data/db")
+        os.system("lxc-attach -n s"+ str(j) +" -- chmod +rwx /data/db")
+
+# Creamos un gluster para las caratulas de las canciones.
+os.system("lxc-attach -n s4 -- gluster peer probe 10.1.2.13")
+os.system("lxc-attach -n s4 -- gluster volume create covers replica 2 10.1.2.13:/covers 10.1.2.14:/covers force")
+os.system("lxc-attach -n s4 -- gluster volume start covers")
+
+# Montamos desde s3 y s4 el volumen creado.
+os.system("lxc-attach -n s3 -- mount -t glusterfs 10.1.2.14:/covers /CDPSfy_Server/public/images/")
+os.system("lxc-attach -n s4 -- mount -t glusterfs 10.1.2.13:/covers /CDPSfy_Server/public/images/")
+
+######################################################################################################
+######################################################################################################
+
+# Deberemos meter en s3 y s4 este comando para arrancar la BBDD: mongod > /dev/null 2>&1 &
 # os.system("lxc-attach -n s4 -- mongod > /dev/null 2>&1 &")
 
-os.system("lxc-attach -n s4 -- wget https://github.com/revilla-92/CDPSfy_MV/blob/master/pfinalp2_mongod.sh -P /")
-os.system("lxc-attach -n s4 -- chmod +rwx /pfinalp2_mongod.sh")
-os.system("lxc-attach -n s4 -- ./pfinalp2_mongod.sh")
-
 # Este comando lo hacemos para ejecutar el comando npm start en una nueva terminal:
-# El comando completo seria: xterm -hold -e "lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm start'" &
+# El comando completo seria: 
+#                               xterm -hold -e "lxc-attach -n s3 -- sh -c 'cd /CDPSfy_Server/ && npm start'" &
+#                               xterm -hold -e "lxc-attach -n s4 -- sh -c 'cd /CDPSfy_Server/ && npm start'" &
+
 # comando3 = "'cd /CDPSfy_Server/ && npm start'"
 # os.system('xterm -hold -e "lxc-attach -n s4 -- sh -c '+comando3+'" &')
-
-# Redirecciona cuando llamamos a tracks al contenido del directorio.
-os.system("lxc-attach -n s1 -- sh -c 'cd /var/www/html && ln -s /mnt/nas'")       
 
 
 print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
 # Arrancamos el baleanceador de carga en una terminal aparte balanceado a s1, s2 y s3 por el puerto 3030 que es donde hemos puesto a escuchar tracks.cdpsfy.es.
-os.system("xterm -hold -e 'lxc-attach -n lb -- xr --verbose --server tcp:0:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001' &")
+os.system("xterm -hold -e 'lxc-attach -n lb -- xr --verbose --server tcp:0:80 --backend 10.1.2.13:80 --backend 10.1.2.14:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001' &")
 
 
 # Imprimimos el tiempo que ha tardado en ejecutarse el script total:
