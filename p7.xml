@@ -71,27 +71,13 @@ SPAIN
     <forwarding type="ip" />
   </vm>
 
-  <vm name="lb_tracks" type="lxc">
+  <vm name="lb" type="lxc">
     <filesystem type="cow">filesystems/rootfs_lxc-cdps</filesystem>
     <if id="1" net="LAN1">
       <ipv4>10.1.1.1/24</ipv4>
     </if>
     <if id="2" net="LAN2">
       <ipv4>10.1.2.1/24</ipv4>
-    </if>
-    <if id="9" net="virbr0">
-      <ipv4>dhcp</ipv4>
-    </if>
-    <forwarding type="ip" />
-  </vm>
-
-  <vm name="lb_server" type="lxc">
-    <filesystem type="cow">filesystems/rootfs_lxc-cdps</filesystem>
-    <if id="1" net="LAN1">
-      <ipv4>10.1.1.2/24</ipv4>
-    </if>
-    <if id="2" net="LAN2">
-      <ipv4>10.1.2.2/24</ipv4>
     </if>
     <if id="9" net="virbr0">
       <ipv4>dhcp</ipv4>
