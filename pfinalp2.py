@@ -78,6 +78,8 @@ os.system("lxc-attach -n nas1 -- gluster peer probe 10.1.3.23")
 os.system("lxc-attach -n nas1 -- gluster volume create nas replica 3 10.1.3.21:/nas 10.1.3.22:/nas 10.1.3.23:/nas force")
 os.system("lxc-attach -n nas1 -- gluster volume start nas")
 
+time.sleep(7)
+
 
 print("-----------------------------------------------------------------------")
 print("---------------------- Configurando Servidores ------------------------")
@@ -185,8 +187,8 @@ print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
 # Arrancamos el baleanceador de carga en una terminal aparte balanceado a s1, s2 y s3 por el puerto 3030 que es donde hemos puesto a escuchar tracks.cdpsfy.es.
-os.system("xterm -hold -e 'lxc-attach -n lb -- xr --verbose --server tcp:0:80 --backend 10.1.2.13:80 --backend 10.1.2.14:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001' &")
-
+os.system("xterm -hold -e 'lxc-attach -n lb_tracks -- xr --verbose --server tcp:0:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001' &")
+# os.system("xterm -hold -e 'lxc-attach -n lb_tracks -- xr --verbose --server tcp:0:80 --backend 10.1.2.13:80 --backend 10.1.2.14:80 --web-interface 0:8001' &")
 
 # Imprimimos el tiempo que ha tardado en ejecutarse el script total:
 print("------------------------ %s seconds ------------------------" % (time.time() - start_time))
