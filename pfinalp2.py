@@ -39,6 +39,7 @@ time.sleep(7)
 # Actualizamos el anfitrion e instalamos nano para poder editar ficheros.
 os.system("sudo apt-get update")
 os.system("sudo apt-get install nano")
+os.system("sudo apt-get install gstreamer1.0-plugins-bad")
 
 # Nos descargamos musica para tener de prueba.
 if (os.path.isdir("Music")):
