@@ -41,7 +41,7 @@ os.system("sudo apt-get update")
 os.system("sudo apt-get install nano")
 
 # Nos descargamos musica para tener de prueba.
-if (os.path.isdir("Music"))
+if (os.path.isdir("Music")):
         os.system("rm -rf Music")
 
 os.system("mkdir Music")
@@ -54,7 +54,7 @@ os.system("wger https://raw.githubusercontent.com/revilla-92/CDPSfy_Server/maste
 os.chdir("../")
 
 # Nos descargamos imagenes para tener covers.
-if (os.path.isdir("Covers"))
+if (os.path.isdir("Covers")):
         os.system("rm -rf Covers")
 
 os.system("mkdir Covers")
