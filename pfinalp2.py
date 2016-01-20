@@ -48,9 +48,9 @@ if (os.path.isdir("Music")):
 os.system("mkdir Music")
 os.chdir("Music")
 os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_Server/master/public/media/Cute.mp3")
-os.system("wger https://raw.githubusercontent.com/revilla-92/CDPSfy_Server/master/public/media/Dubstep.mp3")
-os.system("wger https://raw.githubusercontent.com/revilla-92/CDPSfy_Server/master/public/media/Epic.mp3")
-os.system("wger https://raw.githubusercontent.com/revilla-92/CDPSfy_Server/master/public/media/Littleidea.mp3")
+os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_Server/master/public/media/Dubstep.mp3")
+os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_Server/master/public/media/Epic.mp3")
+os.system("wget https://raw.githubusercontent.com/revilla-92/CDPSfy_Server/master/public/media/Littleidea.mp3")
 
 os.chdir("../")
 
@@ -67,11 +67,8 @@ os.system("mv 500px-Compact_disc_svg.png cover1.png")
 os.system("wget http://maritamade.com/wp-content/uploads/2013/09/CD-Disk.png")
 os.system("mv CD-Disk.png cover2.png")
 
-os.system("wget https://pixabay.com/static/uploads/photo/2013/07/12/14/36/computer-148578_960_720.png")
-os.system("mv computer-148578_960_720.png cover3.png")
-
 os.system("wget https://upload.wikimedia.org/wikipedia/commons/d/d0/DVD-Video_bottom-side.jpg")
-os.system("mv DVD-Video_bottom-side.jpg cover4.jpg")
+os.system("mv DVD-Video_bottom-side.jpg cover3.jpg")
      
 os.chdir("../")   
 
