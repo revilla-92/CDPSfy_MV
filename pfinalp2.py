@@ -73,8 +73,13 @@ os.system("vnx -f p7.xml -v --create")
 print("-----------------------------------------------------------------------")
 print("------------------------- Configurando NAS ----------------------------")
 
+# Como se trata de una orden critica lo dormimos dos segundos para que podamos cancelar el script.
 os.system("lxc-attach -n nas1 -- gluster peer probe 10.1.3.22")
+time.sleep(2)
+
 os.system("lxc-attach -n nas1 -- gluster peer probe 10.1.3.23")
+time.sleep(2)
+
 os.system("lxc-attach -n nas1 -- gluster volume create nas replica 3 10.1.3.21:/nas 10.1.3.22:/nas 10.1.3.23:/nas force")
 os.system("lxc-attach -n nas1 -- gluster volume start nas")
 
@@ -110,11 +115,13 @@ if (nagios):
 
         # Ahora cargamos los ficheros de configuracion para los servidores.
         for n in range (1, 5):
-        	os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/s"+str(n)+"_nagios2.cfg -P /etc/nagios3/conf.d")
+                urlHost = "https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/s"+str(n)+"_nagios2.cfg"
+        	os.system("lxc-attach -n nagios -- wget "+ urlHost +" -P /etc/nagios3/conf.d")
 
         # Remplazamos el fichero de hostgroups
+        urlHostGroups = "https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/hostgroups_nagios2.cfg"
         os.system("lxc-attach -n nagios -- rm -rf /etc/nagios3/conf.d/hostgroups_nagios2.cfg")
-        os.system("lxc-attach -n nagios -- wget https://raw.githubusercontent.com/revilla-92/CDPSfy_MV/master/Nagios/hostgroups_nagios2.cfg -P /etc/nagios3/conf.d")
+        os.system("lxc-attach -n nagios -- wget "+ urlHostGroups +" -P /etc/nagios3/conf.d")
 
         # Reiniciamos nagios3 y apache2
         os.system("lxc-attach -n nagios -- service nagios3 restart")
@@ -165,8 +172,9 @@ os.system("lxc-attach -n s4 -- chmod +rwx /data/db")
 print("-----------------------------------------------------------------------")
 print("------------------- Configurando y Arrancando LB ----------------------")
 
-# Arrancamos el baleanceador de carga en una terminal aparte balanceado a s1, s2 y s3 por el puerto 3030 que es donde hemos puesto a escuchar tracks.cdpsfy.es.
-os.system("xterm -hold -e 'lxc-attach -n lb -- xr --verbose --server tcp:0:80 --backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030 --web-interface 0:8001' &")
+# Arrancamos el baleanceador de carga en una terminal aparte balanceado a s1, s2 y s3 por el puerto 3030 (donde escucha tracks).
+baleanceador = '--backend 10.1.2.11:3030 --backend 10.1.2.12:3030 --backend 10.1.2.13:3030'
+os.system("xterm -hold -e 'lxc-attach -n lb -- xr --verbose --server tcp:0:80 "+ baleanceador +" --web-interface 0:8001' &")
 
 
 # Imprimimos el tiempo que ha tardado en ejecutarse el script total:
